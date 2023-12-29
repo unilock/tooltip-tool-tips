@@ -16,7 +16,7 @@
   "mixins": ["tooltiptooltips.mixins.json"],
 
   "depends": {
-    "fabricloader": ">=0.9.2",
-    "fabric": "*"
+    "fabricloader": "*",
+    "minecraft": ">=1.20"
   }
 }

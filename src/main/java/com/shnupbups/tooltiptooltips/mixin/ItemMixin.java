@@ -26,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.shnupbups.tooltiptooltips.TooltipToolTips.CONFIG;
+
 @Mixin(Item.class)
 public abstract class ItemMixin {
 	@Shadow
@@ -37,33 +39,50 @@ public abstract class ItemMixin {
 
 		if ((Object) this instanceof ToolItem tool) {
 			ToolMaterial material = tool.getMaterial();
+
 			if (tool instanceof MiningToolItem) {
-				texts.add(Text.translatable("tooltip.harvest_level", material.getMiningLevel()).formatted(Formatting.GRAY));
-				int efficiency = EnchantmentHelper.get(stack).getOrDefault(Enchantments.EFFICIENCY, 0);
-				int efficiencyModifier = efficiency > 0 ? (efficiency * efficiency) + 1 : 0;
-				MutableText speedText = Text.translatable("tooltip.harvest_speed", material.getMiningSpeedMultiplier() + efficiencyModifier).formatted(Formatting.GRAY);
-				if (efficiency > 0) {
-					speedText.append(Text.literal(" ").append(Text.translatable("tooltip.efficiency_modifier", efficiencyModifier).formatted(Formatting.WHITE)));
+				if (CONFIG.tools.harvest_level) {
+					texts.add(Text.translatable("tooltip.harvest_level", material.getMiningLevel()).formatted(Formatting.GRAY));
 				}
-				texts.add(speedText);
+
+				if (CONFIG.tools.harvest_speed) {
+					int efficiency = EnchantmentHelper.get(stack).getOrDefault(Enchantments.EFFICIENCY, 0);
+					int efficiencyModifier = efficiency > 0 ? (efficiency * efficiency) + 1 : 0;
+					MutableText speedText = Text.translatable("tooltip.harvest_speed", material.getMiningSpeedMultiplier() + efficiencyModifier).formatted(Formatting.GRAY);
+					if (efficiency > 0) {
+						speedText.append(Text.literal(" ").append(Text.translatable("tooltip.efficiency_modifier", efficiencyModifier).formatted(Formatting.WHITE)));
+					}
+					texts.add(speedText);
+				}
 			}
-			texts.add(Text.translatable("tooltip.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
+
+			if (CONFIG.armor_tools.enchantability) {
+				texts.add(Text.translatable("tooltip.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
+			}
 		} else if ((Object) this instanceof ArmorItem armor) {
-			ArmorMaterial material = armor.getMaterial();
-			texts.add(Text.translatable("tooltip.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
+			if (CONFIG.armor_tools.enchantability) {
+				ArmorMaterial material = armor.getMaterial();
+				texts.add(Text.translatable("tooltip.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
+			}
 		}
 
-		if (stack.isDamageable() && (!stack.isDamaged() || !context.isAdvanced())) {
+		if (CONFIG.armor_tools.durability && stack.isDamageable() && (!stack.isDamaged() || !context.isAdvanced())) {
 			texts.add(Text.translatable("tooltip.durability", stack.getMaxDamage() - stack.getDamage(), stack.getMaxDamage()).formatted(Formatting.GRAY));
 		}
 
 		if (stack.isFood()) {
 			FoodComponent foodComponent = this.getFoodComponent();
-			texts.add(Text.translatable("tooltip.hunger", foodComponent.getHunger()).formatted(Formatting.GRAY));
-			texts.add(Text.translatable("tooltip.saturation", foodComponent.getSaturationModifier()).formatted(Formatting.GRAY));
+
+			if (CONFIG.food.hunger) {
+				texts.add(Text.translatable("tooltip.hunger", foodComponent.getHunger()).formatted(Formatting.GRAY));
+			}
+
+			if (CONFIG.food.saturation) {
+				texts.add(Text.translatable("tooltip.saturation", foodComponent.getSaturationModifier()).formatted(Formatting.GRAY));
+			}
 		}
 
-		if (texts.size() == 1 || Screen.hasShiftDown() || context.isAdvanced()) {
+		if (CONFIG.always_show || Screen.hasShiftDown() || context.isAdvanced()) {
 			tooltip.addAll(texts);
 		} else if (!texts.isEmpty()) {
 			tooltip.add(Text.translatable("tooltip.press_shift").formatted(Formatting.GRAY));

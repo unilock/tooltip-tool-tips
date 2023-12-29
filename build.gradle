@@ -14,6 +14,7 @@ group = project.maven_group
 repositories {
 	maven { url "https://maven.terraformersmc.com/" }
 	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://repo.sleeping.town/" }
 }
 
 dependencies {
@@ -26,9 +27,13 @@ dependencies {
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}"
-	
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}"
+
+	// Kaleido
+	implementation "folk.sisby:kaleido-config:${project.kaleido_version}"
+	include "folk.sisby:kaleido-config:${project.kaleido_version}"
+
 	// ModMenu
 	modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 

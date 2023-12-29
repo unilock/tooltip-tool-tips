@@ -13,6 +13,11 @@
   "icon": "assets/tooltiptooltips/icon.png",
 
   "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.shnupbups.tooltiptooltips.TooltipToolTips"
+    ]
+  },
   "mixins": ["tooltiptooltips.mixins.json"],
 
   "depends": {

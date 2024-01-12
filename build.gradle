@@ -36,17 +36,6 @@ dependencies {
 
 	// ModMenu
 	modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-
-	// RoughlyEnoughItems
-	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-
-	// Architectury Fabric
-	modRuntimeOnly "dev.architectury:architectury-fabric:${project.arch_version}"
-
-	// Cloth Config
-	modRuntimeOnly ("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-		exclude module: "fabric-api" // irit
-	}
 }
 
 java {

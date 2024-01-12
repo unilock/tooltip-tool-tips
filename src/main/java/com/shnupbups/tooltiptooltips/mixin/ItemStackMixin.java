@@ -27,7 +27,7 @@ import static com.shnupbups.tooltiptooltips.TooltipToolTips.CONFIG;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-    @Inject(method = "getTooltip(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/client/item/TooltipContext;)Ljava/util/List;", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getTooltip(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/client/item/TooltipContext;)Ljava/util/List;", at = @At("RETURN"))
     private void getTooltipInject(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         final ItemStack stack = (ItemStack) (Object) this;
         List<Text> texts = new ArrayList<>();
@@ -83,7 +83,5 @@ public abstract class ItemStackMixin {
         } else if (!texts.isEmpty()) {
             tooltip.add(Text.translatable("tooltip.press_shift").formatted(Formatting.GRAY));
         }
-
-        cir.setReturnValue(tooltip);
     }
 }

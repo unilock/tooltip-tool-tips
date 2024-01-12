@@ -4,7 +4,7 @@
   "package": "com.shnupbups.tooltiptooltips.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "ItemMixin"
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

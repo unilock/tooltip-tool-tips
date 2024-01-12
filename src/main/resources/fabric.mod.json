@@ -8,6 +8,9 @@
   "authors": [
     "Shnupbups"
   ],
+  "contributors": [
+    "unilock (config)"
+  ],
 
   "license": "LGPLv3",
   "icon": "assets/tooltiptooltips/icon.png",

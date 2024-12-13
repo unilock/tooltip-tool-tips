@@ -1,97 +1,84 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
+	id 'fabric-loom' version '1.8.+'
 	id 'maven-publish'
-	id "com.modrinth.minotaur" version "2.+"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.mod_name
-version = project.mod_version + "+" + project.version_meta
+version = "${project.mod_version}+${project.minecraft_version}+fabric"
 group = project.maven_group
 
+base {
+	archivesName = project.archives_base_name
+}
+
+loom {
+	mods {
+		"tooltiptooltips" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
 repositories {
-	maven { url "https://maven.terraformersmc.com/" }
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://repo.sleeping.town/" }
+	maven {
+		name = "FzzyMaven"
+		url = "https://maven.fzzyhmstrs.me/"
+	}
+	maven {
+		name = "Sleeping Town"
+		url = "https://repo.sleeping.town/"
+	}
 }
 
 dependencies {
-	// Minecraft
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-
-	// Yarn
-	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v${project.tiny_version}"
-
-	// Fabric Loader
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}"
 
-	// Kaleido
-	implementation "folk.sisby:kaleido-config:${project.kaleido_version}"
-	include "folk.sisby:kaleido-config:${project.kaleido_version}"
-
-	// ModMenu
-	modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+	// Fzzy Config
+	modImplementation "me.fzzyhmstrs:fzzy_config:${project.fcfg_version}"
 }
 
-java {
-	withSourcesJar()
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-
 	it.options.release = 17
 }
 
-processResources {
-	inputs.property "version", project.mod_version
+java {
+	withSourcesJar()
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.mod_version
-	}
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}" }
-	}
-	manifest {
-		attributes([
-				"Specification-Title"		: "${mod_name}",
-				"Specification-Vendor"		: "${maven_group}",
-				"Specification-Version"		: "${mod_version}",
-				"Implementation-Title"		: "${mod_name}",
-				"Implementation-Version"	: "${mod_version}",
-				"Implementation-Vendor"		: "${maven_group}",
-				"Implementation-Timestamp"	: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-				"MixinConfigs"				: "${mod_name}.mixins.json"
-		])
-	}
-}
-
-modrinth {
-	projectId = project.modrinth_project
-	uploadFile = remapJar
-	versionName = "${project.mod_version} for Minecraft ${project.minecraft_version}"
-	gameVersions = ["${project.minecraft_version}"]
-	dependencies {
-		required.project "fabric-api"
+		rename { "${it}_${base.archivesName.get()}" }
 	}
 }
 
 publishing {
 	publications {
-		mavenJava(MavenPublication) {
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
 			from components.java
 		}
 	}
 
 	repositories {
-		mavenLocal()
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
 	}
 }

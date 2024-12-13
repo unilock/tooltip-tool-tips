@@ -1,6 +1,10 @@
 {
+  "tooltip.durability": "Durability: %s/%s",
+  "tooltip.enchantability": "附魔能力：%s",
   "tooltip.harvest_level": "挖掘等级：%s",
   "tooltip.harvest_speed": "挖掘速度：%s",
-  "tooltip.enchantability": "附魔能力：%s",
+  "tooltip.efficiency_modifier": "(+%s)",
+  "tooltip.hunger": "Hunger: %s",
+  "tooltip.saturation": "Saturation: %s",
   "tooltip.press_shift": "按住Shift查看详细信息"
 }

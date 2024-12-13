@@ -1,7 +1,10 @@
 {
+  "tooltip.durability": "прочность: %s/%s",
+  "tooltip.enchantability": "зачарований: ",
   "tooltip.harvest_level": "Уровень добычи: ",
   "tooltip.harvest_speed": "Скорость добычи: ",
-  "tooltip.enchantability": "Макс. зачарований: ",
-  "tooltip.max_durability": "Макс. прочность: ",
+  "tooltip.efficiency_modifier": "(+%s)",
+  "tooltip.hunger": "Hunger: %s",
+  "tooltip.saturation": "Saturation: %s",
   "tooltip.press_shift": "Нажмите SHIFT для просмотра статистики"
 }

@@ -2,29 +2,33 @@
   "schemaVersion": 1,
   "id": "tooltiptooltips",
   "version": "${version}",
-
   "name": "Tooltip Tool Tips",
   "description": "Adds information about tools to their tooltips",
   "authors": [
     "Shnupbups"
   ],
   "contributors": [
-    "unilock (config)"
+    "unilock"
   ],
-
-  "license": "LGPLv3",
+  "contact": {
+    "sources": "https://github.com/unilock/tooltip-tool-tips",
+    "issues": "https://github.com/unilock/tooltip-tool-tips/issues"
+  },
+  "license": "LGPL-3.0-only",
   "icon": "assets/tooltiptooltips/icon.png",
-
   "environment": "client",
   "entrypoints": {
     "client": [
       "com.shnupbups.tooltiptooltips.TooltipToolTips"
     ]
   },
-  "mixins": ["tooltiptooltips.mixins.json"],
-
+  "mixins": [
+    "tooltiptooltips.mixins.json"
+  ],
   "depends": {
     "fabricloader": "*",
-    "minecraft": ">=1.20"
+    "minecraft": ">=1.20",
+    "fabric-api": "*",
+    "fzzy_config": "*"
   }
 }

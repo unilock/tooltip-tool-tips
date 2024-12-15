@@ -50,8 +50,10 @@ public abstract class ItemStackMixin {
             if (tool instanceof MiningToolItem) {
                 if (CONFIG.tools.harvestLevel.isTrue()) {
                     String path = material.getInverseTag().id().getPath();
-                    if (path.startsWith("incorrect_for_") && path.endsWith("_tool")) {
-                        shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.harvest_level", path.substring(14, path.length() - 5)).formatted(Formatting.GRAY));
+                    // Workaround for Mythic Metals
+                    boolean endsWithTool = path.endsWith("_tool");
+                    if (path.startsWith("incorrect_for_") && (endsWithTool || path.endsWith("_tools"))) {
+                        shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.harvest_level", path.substring(14, path.length() - (endsWithTool ? 5 : 6))).formatted(Formatting.GRAY));
                     } else {
                         shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", material.getInverseTag().id().getPath()).formatted(Formatting.GRAY));
                     }

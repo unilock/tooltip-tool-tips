@@ -16,6 +16,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +30,7 @@ import static com.shnupbups.tooltiptooltips.TooltipToolTips.CONFIG;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
     @Inject(method = "getTooltip(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/client/item/TooltipContext;)Ljava/util/List;", at = @At("RETURN"))
-    private void getTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
+    private void getTooltip(@Nullable PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         final ItemStack stack = (ItemStack) (Object) this;
         List<Text> tooltip = cir.getReturnValue();
         boolean shift = false;

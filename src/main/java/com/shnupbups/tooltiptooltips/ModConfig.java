@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 public class ModConfig extends Config {
 	public ModConfig() {
-		super(new Identifier(TooltipToolTips.MOD_ID, "config"));
+		super(Identifier.of(TooltipToolTips.MOD_ID, "config"));
 	}
 
 	@Comment("""
@@ -31,7 +31,7 @@ public class ModConfig extends Config {
 	@Comment("Options that apply to tools and weapons")
 	public Tools tools = new Tools();
 	public static class Tools extends ConfigSection {
-		@Comment("Whether to show the tool's harvest level")
+		@Comment("Whether to show the tool's harvest level or inverse tag")
 		public TriState harvestLevel = TriState.TRUE;
 
 		@Comment("Whether to show the tool's harvest speed")

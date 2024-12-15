@@ -1,6 +1,7 @@
 {
   "tooltiptooltips.durability": "Durability: %s/%s",
   "tooltiptooltips.enchantability": "Enchantability: %s",
+  "tooltiptooltips.inverse_tag": "Inverse Tag: %s",
   "tooltiptooltips.harvest_level": "Harvest Level: %s",
   "tooltiptooltips.harvest_speed": "Harvest Speed: %s",
   "tooltiptooltips.efficiency_modifier": "(+%s)",

@@ -1,6 +1,7 @@
 {
   "tooltiptooltips.durability": "прочность: %s/%s",
   "tooltiptooltips.enchantability": "зачарований: ",
+  "tooltiptooltips.inverse_tag": "Inverse Tag: %s",
   "tooltiptooltips.harvest_level": "Уровень добычи: ",
   "tooltiptooltips.harvest_speed": "Скорость добычи: ",
   "tooltiptooltips.efficiency_modifier": "(+%s)",

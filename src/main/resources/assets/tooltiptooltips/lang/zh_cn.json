@@ -1,6 +1,7 @@
 {
   "tooltiptooltips.durability": "Durability: %s/%s",
   "tooltiptooltips.enchantability": "附魔能力：%s",
+  "tooltiptooltips.inverse_tag": "Inverse Tag: %s",
   "tooltiptooltips.harvest_level": "挖掘等级：%s",
   "tooltiptooltips.harvest_speed": "挖掘速度：%s",
   "tooltiptooltips.efficiency_modifier": "(+%s)",

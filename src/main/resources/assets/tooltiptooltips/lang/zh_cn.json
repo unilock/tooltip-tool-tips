@@ -1,10 +1,10 @@
 {
-  "tooltip.durability": "Durability: %s/%s",
-  "tooltip.enchantability": "附魔能力：%s",
-  "tooltip.harvest_level": "挖掘等级：%s",
-  "tooltip.harvest_speed": "挖掘速度：%s",
-  "tooltip.efficiency_modifier": "(+%s)",
-  "tooltip.hunger": "Hunger: %s",
-  "tooltip.saturation": "Saturation: %s",
-  "tooltip.press_shift": "按住Shift查看详细信息"
+  "tooltiptooltips.durability": "Durability: %s/%s",
+  "tooltiptooltips.enchantability": "附魔能力：%s",
+  "tooltiptooltips.harvest_level": "挖掘等级：%s",
+  "tooltiptooltips.harvest_speed": "挖掘速度：%s",
+  "tooltiptooltips.efficiency_modifier": "(+%s)",
+  "tooltiptooltips.hunger": "Hunger: %s",
+  "tooltiptooltips.saturation": "Saturation: %s",
+  "tooltiptooltips.press_shift": "按住Shift查看详细信息"
 }

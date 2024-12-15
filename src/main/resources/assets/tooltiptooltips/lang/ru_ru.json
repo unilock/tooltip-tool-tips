@@ -1,10 +1,10 @@
 {
-  "tooltip.durability": "прочность: %s/%s",
-  "tooltip.enchantability": "зачарований: ",
-  "tooltip.harvest_level": "Уровень добычи: ",
-  "tooltip.harvest_speed": "Скорость добычи: ",
-  "tooltip.efficiency_modifier": "(+%s)",
-  "tooltip.hunger": "Hunger: %s",
-  "tooltip.saturation": "Saturation: %s",
-  "tooltip.press_shift": "Нажмите SHIFT для просмотра статистики"
+  "tooltiptooltips.durability": "прочность: %s/%s",
+  "tooltiptooltips.enchantability": "зачарований: ",
+  "tooltiptooltips.harvest_level": "Уровень добычи: ",
+  "tooltiptooltips.harvest_speed": "Скорость добычи: ",
+  "tooltiptooltips.efficiency_modifier": "(+%s)",
+  "tooltiptooltips.hunger": "Hunger: %s",
+  "tooltiptooltips.saturation": "Saturation: %s",
+  "tooltiptooltips.press_shift": "Нажмите SHIFT для просмотра статистики"
 }

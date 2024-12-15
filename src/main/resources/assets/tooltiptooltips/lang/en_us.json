@@ -1,10 +1,10 @@
 {
-  "tooltip.durability": "Durability: %s/%s",
-  "tooltip.enchantability": "Enchantability: %s",
-  "tooltip.harvest_level": "Harvest Level: %s",
-  "tooltip.harvest_speed": "Harvest Speed: %s",
-  "tooltip.efficiency_modifier": "(+%s)",
-  "tooltip.hunger": "Hunger: %s",
-  "tooltip.saturation": "Saturation: %s",
-  "tooltip.press_shift": "Press SHIFT for stats"
+  "tooltiptooltips.durability": "Durability: %s/%s",
+  "tooltiptooltips.enchantability": "Enchantability: %s",
+  "tooltiptooltips.harvest_level": "Harvest Level: %s",
+  "tooltiptooltips.harvest_speed": "Harvest Speed: %s",
+  "tooltiptooltips.efficiency_modifier": "(+%s)",
+  "tooltiptooltips.hunger": "Hunger: %s",
+  "tooltiptooltips.saturation": "Saturation: %s",
+  "tooltiptooltips.press_shift": "Press SHIFT for stats"
 }

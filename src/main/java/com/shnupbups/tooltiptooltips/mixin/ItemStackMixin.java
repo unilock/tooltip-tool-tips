@@ -34,42 +34,37 @@ public abstract class ItemStackMixin {
         List<Text> tooltip = cir.getReturnValue();
         boolean shift = false;
 
+        if (CONFIG.armorTools.durability.isTrue() && stack.isDamageable()) {
+            shift = add(shift, CONFIG.armorTools.durability, context, tooltip, Text.translatable("tooltiptooltips.durability", stack.getMaxDamage() - stack.getDamage(), stack.getMaxDamage()).formatted(Formatting.GRAY));
+        }
+
         if (stack.getItem() instanceof ToolItem tool) {
             ToolMaterial material = tool.getMaterial();
 
+            if (CONFIG.armorTools.enchantability.isTrue()) {
+                shift = add(shift, CONFIG.armorTools.enchantability, context, tooltip, Text.translatable("tooltiptooltips.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
+            }
+
             if (tool instanceof MiningToolItem) {
                 if (CONFIG.tools.harvestLevel.isTrue()) {
-                    add(CONFIG.tools.harvestLevel, context, tooltip, Text.translatable("tooltip.harvest_level", material.getMiningLevel()).formatted(Formatting.GRAY));
-                    shift = shift || CONFIG.tools.harvestLevel == ModConfig.TriState.TRUE;
+                    shift = add(shift, CONFIG.tools.harvestLevel, context, tooltip, Text.translatable("tooltiptooltips.harvest_level", material.getMiningLevel()).formatted(Formatting.GRAY));
                 }
 
                 if (CONFIG.tools.harvestSpeed.isTrue()) {
                     int efficiency = EnchantmentHelper.get(stack).getOrDefault(Enchantments.EFFICIENCY, 0);
                     int efficiencyModifier = efficiency > 0 ? (efficiency * efficiency) + 1 : 0;
-                    MutableText speedText = Text.translatable("tooltip.harvest_speed", material.getMiningSpeedMultiplier() + efficiencyModifier).formatted(Formatting.GRAY);
+                    MutableText speedText = Text.translatable("tooltiptooltips.harvest_speed", material.getMiningSpeedMultiplier() + efficiencyModifier).formatted(Formatting.GRAY);
                     if (efficiency > 0) {
-                        speedText.append(Text.literal(" ").append(Text.translatable("tooltip.efficiency_modifier", efficiencyModifier).formatted(Formatting.WHITE)));
+                        speedText.append(Text.literal(" ").append(Text.translatable("tooltiptooltips.efficiency_modifier", efficiencyModifier).formatted(Formatting.WHITE)));
                     }
-                    add(CONFIG.tools.harvestSpeed, context, tooltip, speedText);
-                    shift = shift || CONFIG.tools.harvestSpeed == ModConfig.TriState.TRUE;
+                    shift = add(shift, CONFIG.tools.harvestSpeed, context, tooltip, speedText);
                 }
-            }
-
-            if (CONFIG.armorTools.enchantability.isTrue()) {
-                add(CONFIG.armorTools.enchantability, context, tooltip, Text.translatable("tooltip.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
-                shift = shift || CONFIG.armorTools.enchantability == ModConfig.TriState.TRUE;
             }
         } else if (stack.getItem() instanceof ArmorItem armor) {
             if (CONFIG.armorTools.enchantability.isTrue()) {
                 ArmorMaterial material = armor.getMaterial();
-                add(CONFIG.armorTools.enchantability, context, tooltip, Text.translatable("tooltip.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
-                shift = shift || CONFIG.armorTools.enchantability == ModConfig.TriState.TRUE;
+                shift = add(shift, CONFIG.armorTools.enchantability, context, tooltip, Text.translatable("tooltiptooltips.enchantability", material.getEnchantability()).formatted(Formatting.GRAY));
             }
-        }
-
-        if (CONFIG.armorTools.durability.isTrue() && stack.isDamageable()) {
-            add(CONFIG.armorTools.durability, context, tooltip, Text.translatable("tooltip.durability", stack.getMaxDamage() - stack.getDamage(), stack.getMaxDamage()).formatted(Formatting.GRAY));
-            shift = shift || CONFIG.armorTools.durability == ModConfig.TriState.TRUE;
         }
 
         if (stack.isFood()) {
@@ -77,26 +72,26 @@ public abstract class ItemStackMixin {
 
             if (foodComponent != null) {
                 if (CONFIG.food.hunger.isTrue()) {
-                    add(CONFIG.food.hunger, context, tooltip, Text.translatable("tooltip.hunger", foodComponent.getHunger()).formatted(Formatting.GRAY));
-                    shift = shift || CONFIG.food.hunger == ModConfig.TriState.TRUE;
+                    shift = add(shift, CONFIG.food.hunger, context, tooltip, Text.translatable("tooltiptooltips.hunger", foodComponent.getHunger()).formatted(Formatting.GRAY));
                 }
 
                 if (CONFIG.food.saturation.isTrue()) {
-                    add(CONFIG.food.saturation, context, tooltip, Text.translatable("tooltip.saturation", foodComponent.getSaturationModifier()).formatted(Formatting.GRAY));
-                    shift = shift || CONFIG.food.saturation == ModConfig.TriState.TRUE;
+                    shift = add(shift, CONFIG.food.saturation, context, tooltip, Text.translatable("tooltiptooltips.saturation", foodComponent.getSaturationModifier()).formatted(Formatting.GRAY));
                 }
             }
         }
 
         if (shift && !(Screen.hasShiftDown() || context.isAdvanced())) {
-            tooltip.add(Text.translatable("tooltip.press_shift").formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("tooltiptooltips.press_shift").formatted(Formatting.GRAY));
         }
     }
 
+    // We do not check config.isTrue() in this method to avoid needless calculations for some tooltips.
     @Unique
-    private void add(ModConfig.TriState config, TooltipContext context, List<Text> tooltip, Text line) {
+    private boolean add(boolean shift, ModConfig.TriState config, TooltipContext context, List<Text> tooltip, Text line) {
         if (config == ModConfig.TriState.ALWAYS || (config == ModConfig.TriState.TRUE && (context.isAdvanced() || Screen.hasShiftDown()))) {
             tooltip.add(line);
         }
+        return shift || config == ModConfig.TriState.TRUE;
     }
 }

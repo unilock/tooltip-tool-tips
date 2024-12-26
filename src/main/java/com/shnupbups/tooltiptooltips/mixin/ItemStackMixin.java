@@ -1,6 +1,7 @@
 package com.shnupbups.tooltiptooltips.mixin;
 
 import com.shnupbups.tooltiptooltips.ModConfig;
+import com.shnupbups.tooltiptooltips.TooltipToolTips;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 import static com.shnupbups.tooltiptooltips.TooltipToolTips.CONFIG;
 
@@ -52,12 +54,11 @@ public abstract class ItemStackMixin {
             if (tool instanceof MiningToolItem) {
                 if (CONFIG.tools.harvestLevel.isTrue()) {
                     String path = material.getInverseTag().id().getPath();
-                    // Workaround for Mythic Metals
-                    boolean endsWithTool = path.endsWith("_tool");
-                    if (path.startsWith("incorrect_for_") && (endsWithTool || path.endsWith("_tools"))) {
-                        shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.harvest_level", path.substring(14, path.length() - (endsWithTool ? 5 : 6))).formatted(Formatting.GRAY));
+                    Matcher matcher = TooltipToolTips.getMatcher(path);
+                    if (matcher.find()) {
+                        shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.harvest_level", matcher.group(2)).formatted(Formatting.GRAY));
                     } else {
-                        shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", material.getInverseTag().id().getPath()).formatted(Formatting.GRAY));
+                        shift = add(shift, CONFIG.tools.harvestLevel, type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", path).formatted(Formatting.GRAY));
                     }
                 }
 

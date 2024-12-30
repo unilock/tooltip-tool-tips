@@ -30,5 +30,10 @@
     "minecraft": ">=1.21",
     "fabric-api": "*",
     "fzzy_config": "*"
+  },
+  "custom": {
+    "fzzy_config": [
+      "tooltiptooltips"
+    ]
   }
 }

@@ -1,11 +1,12 @@
 {
   "tooltiptooltips.durability": "Durability: %s/%s",
   "tooltiptooltips.enchantability": "Enchantability: %s",
+  "tooltiptooltips.repair_cost": "Repair Cost: %s",
   "tooltiptooltips.inverse_tag": "Inverse Tag: %s",
   "tooltiptooltips.harvest_level": "Harvest Level: %s",
   "tooltiptooltips.harvest_speed": "Harvest Speed: %s",
   "tooltiptooltips.efficiency_modifier": "(+%s)",
   "tooltiptooltips.hunger": "Hunger: %s",
   "tooltiptooltips.saturation": "Saturation: %s",
-  "tooltiptooltips.press_shift": "Press SHIFT for stats"
+  "tooltiptooltips.press_shift": "Hold SHIFT for stats"
 }

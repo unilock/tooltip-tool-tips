@@ -1,9 +1,8 @@
 plugins {
-	id 'fabric-loom' version '1.8.+'
-	id 'maven-publish'
+	id "fabric-loom" version "1.10.+"
 }
 
-version = "${project.mod_version}+${project.minecraft_version}+fabric"
+version = "${project.mod_version}+${project.minecraft_version_base}"
 group = project.maven_group
 
 base {
@@ -20,10 +19,6 @@ loom {
 
 repositories {
 	maven {
-		name = "FzzyMaven"
-		url = "https://maven.fzzyhmstrs.me/"
-	}
-	maven {
 		name = "Sleeping Town"
 		url = "https://repo.sleeping.town/"
 	}
@@ -34,11 +29,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}"
-
-	// Fzzy Config
-	modImplementation "me.fzzyhmstrs:fzzy_config:${project.fcfg_version}"
+	// Kaleido Config
+	implementation include("folk.sisby:kaleido-config:${project.kcfg_version}")
 }
 
 processResources {
@@ -62,23 +54,9 @@ java {
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${base.archivesName.get()}" }
-	}
-}
-
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
+	["COPYING", "COPYING.LESSER"].each { license ->
+		from(license) {
+			rename { "${it}_${project.base.archivesName.get()}" }
 		}
-	}
-
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }

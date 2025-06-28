@@ -1,57 +1,51 @@
 package com.shnupbups.tooltiptooltips;
 
-import me.fzzyhmstrs.fzzy_config.annotations.Action;
-import me.fzzyhmstrs.fzzy_config.annotations.Comment;
-import me.fzzyhmstrs.fzzy_config.annotations.RequiresAction;
-import me.fzzyhmstrs.fzzy_config.config.Config;
-import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
-import net.minecraft.util.Identifier;
+import folk.sisby.kaleido.api.ReflectiveConfig;
+import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
+import folk.sisby.kaleido.lib.quiltconfig.api.values.TrackedValue;
 
-public class ModConfig extends Config {
-	public ModConfig() {
-		super(Identifier.of(TooltipToolTips.MOD_ID, "config"));
-	}
-
-	@Comment("""
+public class ModConfig extends ReflectiveConfig {
+	@Comment(value = """
 	Config values can be one of the following:
 	- "FALSE" (never show)
 	- "TRUE" (show when holding shift)
 	- "ALWAYS" (always show)
 	""")
-	public boolean nothing = false;
 
 	@Comment("Options that apply to armor, tools, and weapons")
-	public ArmorTools armorTools = new ArmorTools();
-	public static class ArmorTools extends ConfigSection {
+	public final ArmorTools armorTools = new ArmorTools();
+	public static final class ArmorTools extends Section {
 		@Comment("Whether to show the item's (current/max) durability")
-		public TriState durability = TriState.TRUE;
+		public final TrackedValue<TriState> durability = value(TriState.TRUE);
 
 		@Comment("Whether to show the item's enchantability")
-		public TriState enchantability = TriState.TRUE;
+		public final TrackedValue<TriState> enchantability = value(TriState.TRUE);
+
+		@Comment("Whether to show the item's repair cost")
+		public final TrackedValue<TriState> repairCost = value(TriState.TRUE);
 	}
 
 	@Comment("Options that apply to tools and weapons")
-	public Tools tools = new Tools();
-	public static class Tools extends ConfigSection {
+	public final Tools tools = new Tools();
+	public static final class Tools extends Section {
 		@Comment("Whether to show the tool's harvest level or inverse tag")
-		public TriState harvestLevel = TriState.TRUE;
+		public final TrackedValue<TriState> harvestLevel = value(TriState.TRUE);
 
 		@Comment("The regex pattern for converting an inverse tag to a harvest level")
-		@RequiresAction(action = Action.RELOG)
-		public String harvestLevelPattern = "^(incorrect_for|needs)_(.*?)_tools?$";
+		public final TrackedValue<String> harvestLevelPattern = value("^(incorrect_for|needs)_(.*?)_tools?$");
 
 		@Comment("Whether to show the tool's harvest speed")
-		public TriState harvestSpeed = TriState.TRUE;
+		public final TrackedValue<TriState> harvestSpeed = value(TriState.TRUE);
 	}
 
 	@Comment("Options that apply to food")
-	public Food food = new Food();
-	public static class Food extends ConfigSection {
+	public final Food food = new Food();
+	public static final class Food extends Section {
 		@Comment("Whether to show the amount of hunger the food restores")
-		public TriState hunger = TriState.TRUE;
+		public final TrackedValue<TriState> hunger = value(TriState.TRUE);
 
 		@Comment("Whether to show the amount of saturation the food restores")
-		public TriState saturation = TriState.TRUE;
+		public final TrackedValue<TriState> saturation = value(TriState.TRUE);
 	}
 
 	public enum TriState {
@@ -59,7 +53,7 @@ public class ModConfig extends Config {
 		TRUE,
 		ALWAYS;
 
-		public boolean isTrue() {
+		public boolean enabled() {
 			return this == TRUE || this == ALWAYS;
 		}
 	}

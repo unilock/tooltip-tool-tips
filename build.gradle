@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.10.+"
+	id "fabric-loom" version "1.15.+"
 }
 
 version = "${project.mod_version}+${project.minecraft_version_base}"
@@ -37,7 +37,7 @@ processResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "version": inputs.properties.version
 	}
 }
 
@@ -54,9 +54,11 @@ java {
 }
 
 jar {
+    inputs.property "archivesName", project.base.archivesName
+
 	["COPYING", "COPYING.LESSER"].each { license ->
 		from(license) {
-			rename { "${it}_${project.base.archivesName.get()}" }
+			rename { "${it}_${inputs.properties.archivesName}" }
 		}
 	}
 }

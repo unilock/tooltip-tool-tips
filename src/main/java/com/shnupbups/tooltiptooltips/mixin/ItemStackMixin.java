@@ -1,5 +1,6 @@
 package com.shnupbups.tooltiptooltips.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.shnupbups.tooltiptooltips.ModConfig;
 import com.shnupbups.tooltiptooltips.TooltipToolTips;
 import net.minecraft.client.gui.screen.Screen;
@@ -17,8 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,10 +27,9 @@ import static com.shnupbups.tooltiptooltips.TooltipToolTips.CONFIG;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-	@Inject(method = "getTooltip(Lnet/minecraft/item/Item$TooltipContext;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/tooltip/TooltipType;)Ljava/util/List;", at = @At("RETURN"))
-	private void getTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir) {
+	@ModifyReturnValue(method = "getTooltip(Lnet/minecraft/item/Item$TooltipContext;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/tooltip/TooltipType;)Ljava/util/List;", at = @At("RETURN"))
+	private List<Text> getTooltip(List<Text> tooltip, Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type) {
 		final ItemStack stack = (ItemStack) (Object) this;
-		List<Text> tooltip = cir.getReturnValue();
 		boolean shift = false;
 
 		if (CONFIG.armorTools.durability.value().enabled() && stack.isDamageable()) {
@@ -54,7 +52,7 @@ public abstract class ItemStackMixin {
 					String path = material.getInverseTag().id().getPath();
 					Matcher matcher = TooltipToolTips.getMatcher(path);
 					if (matcher.find()) {
-						shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", matcher.group(2)).formatted(Formatting.GRAY));
+						shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", matcher.group("tier")).formatted(Formatting.GRAY));
 					} else {
 						shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", path).formatted(Formatting.GRAY));
 					}
@@ -92,6 +90,7 @@ public abstract class ItemStackMixin {
 		if (shift && !(Screen.hasShiftDown() || type.isAdvanced())) {
 			tooltip.add(Text.translatable("tooltiptooltips.press_shift").formatted(Formatting.GRAY));
 		}
+		return tooltip;
 	}
 
 	// We do not check config.isTrue() in this method to avoid needless calculations for some tooltips.

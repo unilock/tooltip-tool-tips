@@ -1,8 +1,8 @@
-package com.shnupbups.tooltiptooltips.mixin;
+package cc.unilock.tooltiptooltips.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.shnupbups.tooltiptooltips.ModConfig;
-import com.shnupbups.tooltiptooltips.TooltipToolTips;
+import cc.unilock.tooltiptooltips.ModConfig;
+import cc.unilock.tooltiptooltips.TooltipToolTips;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
-import static com.shnupbups.tooltiptooltips.TooltipToolTips.CONFIG;
+import static cc.unilock.tooltiptooltips.TooltipToolTips.CONFIG;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
@@ -77,8 +77,8 @@ public abstract class ItemStackMixin {
 			FoodComponent foodComponent = stack.get(DataComponentTypes.FOOD);
 
 			if (foodComponent != null) {
-				if (CONFIG.food.hunger.value().enabled()) {
-					shift |= add(CONFIG.food.hunger.value(), type, tooltip, Text.translatable("tooltiptooltips.hunger", foodComponent.nutrition()).formatted(Formatting.GRAY));
+				if (CONFIG.food.nutrition.value().enabled()) {
+					shift |= add(CONFIG.food.nutrition.value(), type, tooltip, Text.translatable("tooltiptooltips.nutrition", foodComponent.nutrition()).formatted(Formatting.GRAY));
 				}
 
 				if (CONFIG.food.saturation.value().enabled()) {

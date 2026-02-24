@@ -1,4 +1,4 @@
-package com.shnupbups.tooltiptooltips;
+package cc.unilock.tooltiptooltips;
 
 import folk.sisby.kaleido.api.ReflectiveConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
@@ -41,8 +41,8 @@ public class ModConfig extends ReflectiveConfig {
 	@Comment("Options that apply to food")
 	public final Food food = new Food();
 	public static final class Food extends Section {
-		@Comment("Whether to show the amount of hunger the food restores")
-		public final TrackedValue<TriState> hunger = value(TriState.TRUE);
+		@Comment("Whether to show the amount of nutrition the food restores")
+		public final TrackedValue<TriState> nutrition = value(TriState.TRUE);
 
 		@Comment("Whether to show the amount of saturation the food restores")
 		public final TrackedValue<TriState> saturation = value(TriState.TRUE);

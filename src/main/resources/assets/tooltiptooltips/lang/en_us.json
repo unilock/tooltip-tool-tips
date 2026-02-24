@@ -6,7 +6,7 @@
   "tooltiptooltips.harvest_level": "Harvest Level: %s",
   "tooltiptooltips.harvest_speed": "Harvest Speed: %s",
   "tooltiptooltips.efficiency_modifier": "(+%s)",
-  "tooltiptooltips.hunger": "Hunger: %s",
+  "tooltiptooltips.nutrition": "Nutrition: %s",
   "tooltiptooltips.saturation": "Saturation: %s",
   "tooltiptooltips.press_shift": "Hold SHIFT for stats"
 }

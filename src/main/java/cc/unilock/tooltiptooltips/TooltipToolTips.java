@@ -1,4 +1,4 @@
-package com.shnupbups.tooltiptooltips;
+package cc.unilock.tooltiptooltips;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;

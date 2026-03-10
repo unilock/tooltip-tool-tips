@@ -31,9 +31,6 @@ public class ModConfig extends ReflectiveConfig {
 		@Comment("Whether to show the tool's harvest level or inverse tag")
 		public final TrackedValue<TriState> harvestLevel = value(TriState.TRUE);
 
-		@Comment("The regex pattern for converting an inverse tag to a harvest level; matches the named capturing group \"tier\"")
-		public final TrackedValue<String> harvestLevelPattern = value("^(?:incorrect_for|needs)_(?<tier>.*?)_tools?$");
-
 		@Comment("Whether to show the tool's harvest speed")
 		public final TrackedValue<TriState> harvestSpeed = value(TriState.TRUE);
 	}

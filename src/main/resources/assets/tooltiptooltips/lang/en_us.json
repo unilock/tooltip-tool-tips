@@ -8,5 +8,30 @@
   "tooltiptooltips.efficiency_modifier": "(+%s)",
   "tooltiptooltips.nutrition": "Nutrition: %s",
   "tooltiptooltips.saturation": "Saturation: %s",
-  "tooltiptooltips.press_shift": "Hold SHIFT for stats"
+  "tooltiptooltips.press_shift": "Hold SHIFT for stats",
+
+  "harvest_level.minecraft.incorrect_for_wooden_tool": "wooden",
+  "harvest_level.minecraft.incorrect_for_stone_tool": "stone",
+  "harvest_level.minecraft.incorrect_for_iron_tool": "iron",
+  "harvest_level.minecraft.incorrect_for_gold_tool": "wooden",
+  "harvest_level.minecraft.incorrect_for_diamond_tool": "diamond",
+  "harvest_level.minecraft.incorrect_for_netherite_tool": "netherite",
+
+  "harvest_level.abysstech.incorrect_for_abyssal_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_boundary_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_grave_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_lively_tool": "iron",
+  "harvest_level.abysstech.incorrect_for_meld_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_primordial_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_rooting_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_rotting_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_verdant_tool": "diamond",
+  "harvest_level.abysstech.incorrect_for_vibrant_tool": "iron",
+
+  "harvest_level.immersiveengineering.incorrect_for_steel_tool": "iron",
+
+  "harvest_level.oxytools.incorrect_for_copper_tool": "iron",
+  "harvest_level.oxytools.incorrect_for_exposed_copper_tool": "iron",
+  "harvest_level.oxytools.incorrect_for_weathered_copper_tool": "iron",
+  "harvest_level.oxytools.incorrect_for_oxidized_copper_tool": "iron"
 }

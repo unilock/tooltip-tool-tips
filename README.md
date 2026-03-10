@@ -9,7 +9,8 @@ Features support for:
   - Enchantability
   - Repair Cost
 - Tools
-  - Harvest Level (using regex to convert from the tool's inverse tag)
+  - Harvest Level (using horrible hacks to convert from the tool's inverse tag)
+    - If your tool displays its inverse tag instead of its harvest level, add a translation for it in the format of `"harvest_level.<inverseTagNamespace>.<inverseTagPath>": "<vanillaHarvestLevel>"` ([examples](src/main/resources/assets/tooltiptooltips/en_us.json))
   - Harvest Speed (with extra support for Efficiency...?)
 - Food
   - Nutrition

@@ -1,19 +1,24 @@
 package cc.unilock.tooltiptooltips.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import cc.unilock.tooltiptooltips.HarvestLevelManager;
 import cc.unilock.tooltiptooltips.ModConfig;
-import cc.unilock.tooltiptooltips.TooltipToolTips;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,7 +26,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 
 import static cc.unilock.tooltiptooltips.TooltipToolTips.CONFIG;
 
@@ -49,18 +53,26 @@ public abstract class ItemStackMixin {
 
 			if (tool instanceof MiningToolItem) {
 				if (CONFIG.tools.harvestLevel.value().enabled()) {
-					String path = material.getInverseTag().id().getPath();
-					Matcher matcher = TooltipToolTips.getMatcher(path);
-					if (matcher.find()) {
-						shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", matcher.group("tier")).formatted(Formatting.GRAY));
-					} else {
-						shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", path).formatted(Formatting.GRAY));
+					TagKey<Block> inverseTag = material.getInverseTag();
+					if (inverseTag != null) {
+						Identifier id = inverseTag.id();
+						String key = id.toTranslationKey("harvest_level");
+						if (I18n.hasTranslation(key)) {
+							shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", I18n.translate(key)).formatted(Formatting.GRAY));
+						} else {
+							String tier = HarvestLevelManager.getTier(id);
+							if (tier != null) {
+								shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", tier).formatted(Formatting.GRAY));
+							} else {
+								shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", id.toString()).formatted(Formatting.GRAY));
+							}
+						}
 					}
 				}
 
 				if (CONFIG.tools.harvestSpeed.value().enabled()) {
 					// Thanks Mojang
-					int efficiency = Optional.ofNullable(context.getRegistryLookup()).flatMap(registries -> registries.getOptionalWrapper(RegistryKeys.ENCHANTMENT).flatMap(registry -> registry.getOptional(Enchantments.EFFICIENCY).map(enchantment -> stack.getEnchantments().getLevel(enchantment)))).orElse(0);
+					int efficiency = Optional.ofNullable(context.getRegistryLookup()).flatMap(registries -> registries.getOptionalWrapper(RegistryKeys.ENCHANTMENT).flatMap(registry -> registry.getOptional(Enchantments.EFFICIENCY).map(enchantment -> EnchantmentHelper.getEnchantments(stack).getLevel(enchantment)))).orElse(0);
 					int efficiencyModifier = efficiency > 0 ? (efficiency * efficiency) + 1 : 0;
 					MutableText speedText = Text.translatable("tooltiptooltips.harvest_speed", material.getMiningSpeedMultiplier() + efficiencyModifier).formatted(Formatting.GRAY);
 					shift |= add(CONFIG.tools.harvestSpeed.value(), type, tooltip, speedText);
@@ -73,17 +85,13 @@ public abstract class ItemStackMixin {
 			}
 		}
 
-		if (stack.contains(DataComponentTypes.FOOD)) {
-			FoodComponent foodComponent = stack.get(DataComponentTypes.FOOD);
+		if (stack.get(DataComponentTypes.FOOD) instanceof FoodComponent foodComponent) {
+			if (CONFIG.food.nutrition.value().enabled()) {
+				shift |= add(CONFIG.food.nutrition.value(), type, tooltip, Text.translatable("tooltiptooltips.nutrition", foodComponent.nutrition()).formatted(Formatting.GRAY));
+			}
 
-			if (foodComponent != null) {
-				if (CONFIG.food.nutrition.value().enabled()) {
-					shift |= add(CONFIG.food.nutrition.value(), type, tooltip, Text.translatable("tooltiptooltips.nutrition", foodComponent.nutrition()).formatted(Formatting.GRAY));
-				}
-
-				if (CONFIG.food.saturation.value().enabled()) {
-					shift |= add(CONFIG.food.saturation.value(), type, tooltip, Text.translatable("tooltiptooltips.saturation", foodComponent.saturation()).formatted(Formatting.GRAY));
-				}
+			if (CONFIG.food.saturation.value().enabled()) {
+				shift |= add(CONFIG.food.saturation.value(), type, tooltip, Text.translatable("tooltiptooltips.saturation", foodComponent.saturation()).formatted(Formatting.GRAY));
 			}
 		}
 

@@ -30,7 +30,7 @@ public class TagGroupLoaderMixin {
 	private boolean isBlockTags = false;
 
 	@Inject(method = "loadTags", at = @At("HEAD"))
-	private void loadTags(CallbackInfoReturnable<Map<Identifier, List<TagGroupLoader.TrackedEntry>>> cir) {
+	private void loadTags$head(CallbackInfoReturnable<Map<Identifier, List<TagGroupLoader.TrackedEntry>>> cir) {
 		if (Objects.equals(this.dataType, "tags/block")) {
 			this.isBlockTags = true;
 			HarvestLevelManager.clear();
@@ -40,7 +40,7 @@ public class TagGroupLoaderMixin {
 	}
 
 	@WrapOperation(method = "loadTags", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/tag/TagFile;entries()Ljava/util/List;"))
-	private List<TagEntry> loadTags(TagFile instance, Operation<List<TagEntry>> original, @Local(ordinal = 0) Identifier identifier) {
+	private List<TagEntry> loadTags$entries(TagFile instance, Operation<List<TagEntry>> original, @Local(ordinal = 0) Identifier identifier) {
 		List<TagEntry> ret = original.call(instance);
 
 		if (this.isBlockTags) {
@@ -48,5 +48,12 @@ public class TagGroupLoaderMixin {
 		}
 
 		return original.call(instance);
+	}
+
+	@Inject(method = "loadTags", at = @At("TAIL"))
+	private void loadTags$tail(CallbackInfoReturnable<Map<Identifier, List<TagGroupLoader.TrackedEntry>>> cir) {
+		if (this.isBlockTags) {
+			HarvestLevelManager.tagsLoaded();
+		}
 	}
 }

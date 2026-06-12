@@ -48,10 +48,6 @@ public class HarvestLevelManager {
 				.map(tagEntry -> ((TagEntryAccessor) tagEntry).getId())
 				.collect(Collectors.toUnmodifiableSet());
 
-		for (var id : tagIds) {
-			System.out.println("- contains "+id.toString());
-		}
-
 		if (tagIds.contains(WOODEN) || tagIds.contains(GOLD)) {
 			return 1;
 		} else if (tagIds.contains(STONE)) {

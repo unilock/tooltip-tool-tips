@@ -15,5 +15,7 @@
   "harvest_level.minecraft.incorrect_for_iron_tool": "iron",
   "harvest_level.minecraft.incorrect_for_gold_tool": "wooden",
   "harvest_level.minecraft.incorrect_for_diamond_tool": "diamond",
-  "harvest_level.minecraft.incorrect_for_netherite_tool": "netherite"
+  "harvest_level.minecraft.incorrect_for_netherite_tool": "netherite",
+
+  "harvest_level.mythicmetals.incorrect_for_unobtainium_alloy_tools": "netherite++"
 }

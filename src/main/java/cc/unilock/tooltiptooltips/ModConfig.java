@@ -29,7 +29,7 @@ public class ModConfig extends ReflectiveConfig {
 	@Comment("Options that apply to tools and weapons")
 	public final Tools tools = new Tools();
 	public static final class Tools extends Section {
-		@Comment("Whether to show the tool's harvest level - only works on pickaxes!")
+		@Comment("Whether to show the tool's harvest level or inverse tag")
 		public final TrackedValue<TriState> harvestLevel = value(TriState.TRUE);
 
 		@Comment("Map of block ID to appropriate harvest level")

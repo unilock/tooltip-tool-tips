@@ -32,7 +32,7 @@ public class ModConfig extends ReflectiveConfig {
 		@Comment("Whether to show the tool's harvest level or inverse tag")
 		public final TrackedValue<TriState> harvestLevel = value(TriState.TRUE);
 
-		@Comment("Map of block ID to appropriate harvest level")
+		@Comment("Map of harvest level to block ID")
 		public final TrackedValue<ValueMap<String>> harvestLevelBlocks = map("")
 				.put("diamond", "minecraft:ancient_debris")
 				.put("iron", "minecraft:diamond_ore")

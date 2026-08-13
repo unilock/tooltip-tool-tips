@@ -22,6 +22,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -76,17 +77,22 @@ public abstract class ItemStackMixin {
 							if (tool instanceof PickaxeItem) {
 								String tier = TOOL2TIER.computeIfAbsent(material, m -> {
 									for (Map.Entry<String, String> entry : CONFIG.tools.harvestLevelBlocks.value()) {
-										var blockId = Identifier.tryParse(entry.getValue());
+										Identifier blockId = Identifier.tryParse(entry.getValue());
+
 										if (blockId != null) {
-											var block = Registries.BLOCK.get(blockId);
-											if (!block.getRegistryEntry().isIn(m.getInverseTag())) {
+											Optional<RegistryEntry.Reference<Block>> optional = Registries.BLOCK.getEntry(blockId);
+
+											if (optional.isEmpty()) {
+												LOGGER.error("Failed to find block {} for harvest level {}", entry.getValue(), entry.getKey());
+												return "[invalid config]";
+											} else if (!optional.get().isIn(m.getInverseTag())) {
 												return entry.getKey();
 											}
 										}
 									}
 
 									LOGGER.error("Failed to compute harvest level for ToolMaterial with inverse tag #{}", m.getInverseTag().id().toString());
-									return "[error]";
+									return "[unknown error]";
 								});
 
 								shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", tier).formatted(Formatting.GRAY));
@@ -94,6 +100,7 @@ public abstract class ItemStackMixin {
 								// TODO: this only works on singleplayer...
 								//       either implement client-side tag data parsing, networking, or both!?
 								String tier = HarvestLevelManager.getTier(id);
+
 								if (tier != null) {
 									shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", tier).formatted(Formatting.GRAY));
 								} else {

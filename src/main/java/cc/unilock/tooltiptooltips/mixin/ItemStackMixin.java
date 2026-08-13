@@ -1,20 +1,24 @@
 package cc.unilock.tooltiptooltips.mixin;
 
-import cc.unilock.tooltiptooltips.HarvestLevelManager;
 import cc.unilock.tooltiptooltips.ModConfig;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -25,9 +29,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static cc.unilock.tooltiptooltips.TooltipToolTips.CONFIG;
+import static cc.unilock.tooltiptooltips.TooltipToolTips.LOGGER;
+import static cc.unilock.tooltiptooltips.TooltipToolTips.TOOL2TIER;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
@@ -53,29 +60,57 @@ public abstract class ItemStackMixin {
 
 			if (tool instanceof MiningToolItem) {
 				if (CONFIG.tools.harvestLevel.value().enabled()) {
-					TagKey<Block> inverseTag = material.getInverseTag();
-					if (inverseTag != null) {
-						Identifier id = inverseTag.id();
-						String key = id.toTranslationKey("harvest_level");
-						if (I18n.hasTranslation(key)) {
-							shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", I18n.translate(key)).formatted(Formatting.GRAY));
-						} else {
-							String tier = HarvestLevelManager.getTier(id);
-							if (tier != null) {
-								shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", tier).formatted(Formatting.GRAY));
-							} else {
-								shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", id.toString()).formatted(Formatting.GRAY));
+					if (tool instanceof PickaxeItem) {
+						String tier = TOOL2TIER.computeIfAbsent(material, m -> {
+							for (Map.Entry<String, String> entry : CONFIG.tools.harvestLevelBlocks.value()) {
+								var blockId = Identifier.tryParse(entry.getValue());
+								if (blockId != null) {
+									var block = Registries.BLOCK.get(blockId);
+									if (!block.getRegistryEntry().isIn(m.getInverseTag())) {
+										return entry.getKey();
+									}
+								}
 							}
-						}
+
+							LOGGER.error("Failed to compute harvest level for ToolMaterial with inverse tag #{}", m.getInverseTag().id().toString());
+							return "[error]";
+						});
+
+						shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", tier).formatted(Formatting.GRAY));
 					}
+//					else
+//					{
+//						TagKey<Block> inverseTag = material.getInverseTag();
+//
+//						if (inverseTag != null) {
+//							Identifier id = inverseTag.id();
+//							String key = id.toTranslationKey("harvest_level");
+//
+//							if (I18n.hasTranslation(key)) {
+//								shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", I18n.translate(key)).formatted(Formatting.GRAY));
+//							} else {
+//								// TODO: this only works on singleplayer...
+//								String tier = HarvestLevelManager.getTier(id);
+//								if (tier != null) {
+//									shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.harvest_level", tier).formatted(Formatting.GRAY));
+//								} else {
+//									shift |= add(CONFIG.tools.harvestLevel.value(), type, tooltip, Text.translatable("tooltiptooltips.inverse_tag", id.toString()).formatted(Formatting.GRAY));
+//								}
+//							}
+//						}
+//					}
 				}
 
 				if (CONFIG.tools.harvestSpeed.value().enabled()) {
+					MutableText speedText = Text.translatable("tooltiptooltips.harvest_speed", material.getMiningSpeedMultiplier());
+
 					// Thanks Mojang
 					int efficiency = Optional.ofNullable(context.getRegistryLookup()).flatMap(registries -> registries.getOptionalWrapper(RegistryKeys.ENCHANTMENT).flatMap(registry -> registry.getOptional(Enchantments.EFFICIENCY).map(enchantment -> EnchantmentHelper.getEnchantments(stack).getLevel(enchantment)))).orElse(0);
-					int efficiencyModifier = efficiency > 0 ? (efficiency * efficiency) + 1 : 0;
-					MutableText speedText = Text.translatable("tooltiptooltips.harvest_speed", material.getMiningSpeedMultiplier() + efficiencyModifier).formatted(Formatting.GRAY);
-					shift |= add(CONFIG.tools.harvestSpeed.value(), type, tooltip, speedText);
+					if (efficiency > 0) {
+						speedText.append(Text.literal(" ")).append(Text.translatable("tooltiptooltips.efficiency_modifier", efficiency * efficiency + 1));
+					}
+
+					shift |= add(CONFIG.tools.harvestSpeed.value(), type, tooltip, speedText.formatted(Formatting.GRAY));
 				}
 			}
 		} else if (stack.getItem() instanceof ArmorItem armor) {

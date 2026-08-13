@@ -30,7 +30,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Kaleido Config
-	implementation include("folk.sisby:kaleido-config:${project.kcfg_version}")
+	include implementation("folk.sisby:kaleido-config:${project.kcfg_version}")
 }
 
 processResources {

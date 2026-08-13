@@ -3,6 +3,7 @@ package cc.unilock.tooltiptooltips;
 import folk.sisby.kaleido.api.ReflectiveConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import folk.sisby.kaleido.lib.quiltconfig.api.values.TrackedValue;
+import folk.sisby.kaleido.lib.quiltconfig.api.values.ValueMap;
 
 public class ModConfig extends ReflectiveConfig {
 	@Comment(value = """
@@ -28,8 +29,16 @@ public class ModConfig extends ReflectiveConfig {
 	@Comment("Options that apply to tools and weapons")
 	public final Tools tools = new Tools();
 	public static final class Tools extends Section {
-		@Comment("Whether to show the tool's harvest level or inverse tag")
+		@Comment("Whether to show the tool's harvest level - only works on pickaxes!")
 		public final TrackedValue<TriState> harvestLevel = value(TriState.TRUE);
+
+		@Comment("Map of block ID to appropriate harvest level")
+		public final TrackedValue<ValueMap<String>> harvestLevelBlocks = map("")
+				.put("diamond", "minecraft:ancient_debris")
+				.put("iron", "minecraft:diamond_ore")
+				.put("stone", "minecraft:iron_ore")
+				.put("wood", "minecraft:coal_ore")
+				.build();
 
 		@Comment("Whether to show the tool's harvest speed")
 		public final TrackedValue<TriState> harvestSpeed = value(TriState.TRUE);
